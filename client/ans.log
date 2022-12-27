@@ -1,0 +1,12 @@
+0-Error-27Dec22:
+'error iOS project folder not found. Are you sure this is a React Native project?. info Run CLI with --verbose flag for more details.'
+solution: 
+    - move the ios/android folder to the backup folder
+    - run react-native eject
+    - go to /ios and run 'pod install'
+    - run react-native run-ios
+
+1-Info-27Dec22-building app first time takes too much time,
+solution:
+    - either build on xcode
+    - wait about 8-10 minutes
