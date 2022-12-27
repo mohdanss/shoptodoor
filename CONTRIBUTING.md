@@ -6,7 +6,7 @@ We welcome contributions to the Delivery System Mobile App (MERN) - Shoptodoor! 
 
 Here are some ways you can contribute:
 
-* **Report bugs** : If you find a bug in the app, please report it by creating a new issue in the [issue tracker](https://github.com/mohdanss/shoptodoor.git/issues). Be sure to include as much detail as possible, including the steps to reproduce the bug and any error messages you may have received.
+* **Report bugs** : If you find a bug in the app, please report it by creating a new issue in the [issue tracker](https://github.com/mohdanss/shoptodoor/issues). Be sure to include as much detail as possible, including the steps to reproduce the bug and any error messages you may have received.
 * **Fix bugs** : If you have identified a bug in the app and have a fix, please create a new pull request with the fix. Be sure to include a description of the bug and the steps you took to fix it.
 * **Implement new features** : If you have an idea for a new feature, please create a new issue in the issue tracker to discuss it with the team. If the feature is approved, you can implement it and create a pull request for review.
 
