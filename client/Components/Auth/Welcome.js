@@ -2,6 +2,8 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 // importing the svg logo (which is create as react component)
 import Logo from '../../Static/Logo/LogoWhite';
+import PrimaryButton from './Buttons/PrimaryButton';
+import SecondaryButton from './Buttons/SecondaryButton';
 
 // welcome - default RC.
 const Welcome = () => {
@@ -37,9 +39,9 @@ const Welcome = () => {
         {/* buttons container */}
         <View style={styles.buttonContainer}>
           {/* login button */}
-          <LoginButton />
+          <SecondaryButton title="Login" />
           {/* register button */}
-          <RegisterButton />
+          <PrimaryButton title="Register" />
         </View>
       </View>
     </View>
@@ -104,8 +106,9 @@ const styles = StyleSheet.create({
   buttonContainer: {
     alignItems: 'center',
     borderColor: 'blue',
-    justifyContent: 'flex-end',
-    width: '100%',
+    justifyContent: 'space-between',
+    width: '90%',
+    height: 110,
   },
   container: {
     alignItems: 'center',
