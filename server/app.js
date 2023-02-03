@@ -4,11 +4,13 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const app = express();
 const jwt = require("jsonwebtoken");
+const bodyParser = require("body-parser");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // importing user context
 const User = require("./models/user");
-
+const Store = require("./models/store");
+const Product = require("./models/product");
 // Register
 app.post("/register", async (req, res) => {
   // Our register logic starts here
@@ -60,6 +62,7 @@ app.post("/register", async (req, res) => {
         password: encryptedPassword,
         role: role,
         token: "token",
+        phone: phone,
       });
       const token = jwt.sign(
         { user_id: user._id, email },
@@ -86,6 +89,11 @@ app.post("/register", async (req, res) => {
     console.log(err);
   }
 });
+app.use(
+  bodyParser.urlencoded({
+    extended: false,
+  })
+);
 
 // Login
 app.post("/login", async (req, res) => {
@@ -102,7 +110,7 @@ app.post("/login", async (req, res) => {
     //Validate if user exist in our database
     const user = await User.findOne({ email: email.toLowerCase() });
 
-    if (user && bcrypt.compare(password, user.password)) {
+    if (user && (await bcrypt.compare(password, user.password))) {
       // Create token
 
       const token = jwt.sign(
@@ -122,6 +130,73 @@ app.post("/login", async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).send("Something went wrong");
+  }
+});
+
+app.post("/becomeVendor/:id", async (req, res) => {
+  if (!req.params.id) {
+    return res.status(400).send("User id is required");
+  }
+  const storeAlreadyExist = await Store.findOne({ owner_id: req.params.id }); // check if store already exist
+  console.log(storeAlreadyExist);
+  if (storeAlreadyExist) {
+    return res.status(409).send("Store Already Exist");
+  }
+  const store = new Store({
+    store_name: req.body.store_name,
+    adress: req.body.adress,
+    phone: req.body.phone,
+    products: [
+      new Product({
+        name: "awaos",
+        description: "awos",
+        price: 12,
+        rating: 12,
+      }),
+    ], // create a product
+    owner_id: req.params.id,
+  });
+  User.findByIdAndUpdate(
+    (c) => {
+      c.id == req.params.id;
+    },
+    { role: "vendor" }
+  );
+  store
+    .save()
+    .then((item) => {
+      return res.status(200).json(item);
+    })
+    .catch((err) => {
+      return res.status(400).send("Unable to save to database");
+    });
+});
+
+app.post("/addProduct/:id", async (req, res) => {
+  const storeId = req.params.id;
+  var current_store = await Store.findOne({ _id: storeId });
+  if (current_store) {
+    const product_name = req.body.product_name;
+    const description = req.body.description;
+    const price = req.body.price;
+    const rating = 0;
+    const product = new Product({
+      name: product_name,
+      description,
+      price,
+      rating,
+    });
+    current_store.update({ $push: { products: product } });
+    product
+      .save()
+      .then((item) => {
+        return res.status(200).json(item);
+      })
+      .catch((err) => {
+        return res.status(200).send(err);
+      });
+  } else {
+    return res.status(200).send("Please store register first");
   }
 });
 
