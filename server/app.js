@@ -185,6 +185,7 @@ app.post("/addProduct/:id", async (req, res) => {
       description,
       price,
       rating,
+      storeId,
     });
     current_store.update({ $push: { products: product } });
     product
@@ -198,6 +199,17 @@ app.post("/addProduct/:id", async (req, res) => {
   } else {
     return res.status(200).send("Please store register first");
   }
+});
+
+app.post("/getStoreProducts/:storeId", async (req, res) => {
+  const storeid = req.params.storeId;
+  const allProducts = await Product.find();
+});
+
+app.post("/searchProduct/:name", async (req, res) => {
+  const productname = req.params.name;
+  const result = await Product.find({ name: { $regex: productname } });
+  return res.status(400).send(result);
 });
 
 module.exports = app;
