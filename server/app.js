@@ -5,12 +5,14 @@ const bcrypt = require("bcrypt");
 const app = express();
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // importing user context
 const User = require("./models/user");
 const Store = require("./models/store");
 const Product = require("./models/product");
+const { count } = require("./models/product");
 // Register
 app.post("/register", async (req, res) => {
   // Our register logic starts here
@@ -173,7 +175,7 @@ app.post("/becomeVendor/:id", async (req, res) => {
 });
 
 app.post("/addProduct/:id", async (req, res) => {
-  const storeId = req.params.id;
+  const storeId = mongoose.Types.ObjectId(req.params.id);
   var current_store = await Store.findOne({ _id: storeId });
   if (current_store) {
     const product_name = req.body.product_name;
@@ -194,22 +196,31 @@ app.post("/addProduct/:id", async (req, res) => {
         return res.status(200).json(item);
       })
       .catch((err) => {
-        return res.status(200).send(err);
+        return res.status(400).send(err);
       });
   } else {
-    return res.status(200).send("Please store register first");
+    return res.status(400).send("Please store register first");
   }
 });
 
-app.post("/getStoreProducts/:storeId", async (req, res) => {
-  const storeid = req.params.storeId;
-  const allProducts = await Product.find();
+app.get("/getStoreProducts/:storeId", async (req, res) => {
+  const storeid = mongoose.Types.ObjectId(req.params.storeId);
+  const allProducts = await Product.find({ storeId: storeid });
+  if (allProducts.length > 0) {
+    return res.status(200).send(allProducts);
+  } else {
+    return res.status(400).send({ msg: "No Product found in store" });
+  }
 });
 
-app.post("/searchProduct/:name", async (req, res) => {
+app.get("/searchProduct/:name", async (req, res) => {
   const productname = req.params.name;
   const result = await Product.find({ name: { $regex: productname } });
-  return res.status(400).send(result);
+  if (result.length > 0) {
+    return res.status(200).send(result);
+  } else {
+    return res.status(400).send({ msg: "No Product Found" });
+  }
 });
 
 module.exports = app;
