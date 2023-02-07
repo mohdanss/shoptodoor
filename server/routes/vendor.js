@@ -1,6 +1,7 @@
 const Store = require("../models/store");
 const Product = require("../models/product");
 const mongoose = require("mongoose");
+const { ObjectId } = require("mongodb");
 module.exports.becomeVendor = async (req, res) => {
   if (!req.params.id) {
     return res.status(400).send("User id is required");
@@ -86,7 +87,34 @@ module.exports.searchProductByName = async (req, res) => {
   }
 };
 
-// module.exports.updateProduct = async (req, res) => {
-//   const productId = req.params.product_id;
-//   var product = await Product.find({ id: ObjectId(productId) });
-// };
+module.exports.updateProduct = async (req, res) => {
+  const productId = req.params.product_id;
+  const product_name = req.body.product_name;
+  const description = req.body.description;
+  const price = req.body.price;
+  const rating = 0;
+  const product_type = req.body.type;
+  const quantity = req.body.quantity;
+  await Product.updateOne(
+    { __id: ObjectId(productId) },
+    {
+      $set: {
+        product_name,
+        description,
+        price,
+        rating,
+        product_type,
+        quantity,
+      },
+    }
+  )
+
+    .then((item) => {
+      return res.status(200).json(item);
+    })
+    .catch((err) => {
+      return res.status(400).send(err);
+    });
+  {
+  }
+};
