@@ -7,15 +7,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // importing user context
 const auth = require("./routes/auth.js");
-// Register
-app.post("/register", auth.signup);
-// Login
-app.post("/login", auth.login);
+app.post("/register", auth.signup); // Register
+app.post("/login", auth.login); // login
 
 const vendor = require("./routes/vendor");
 app.post("/becomeVendor/:id", vendor.becomeVendor);
 app.post("/addProduct/:id", vendor.addProduct); //ok
 app.get("/getStoreProducts/:storeId", vendor.getStoreProduct); //ok
 app.get("/searchProduct/:name", vendor.searchProductByName); //ok
+app.get("/updateProduct/:product_id", vendor.updateProduct);
 
 module.exports = app;
