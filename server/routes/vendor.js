@@ -72,7 +72,7 @@ export const addProduct = async (req, res) => {
 export const getStoreProduct = async (req, res) => {
   const storeid = Types.ObjectId(req.params.store_id);
   var allProducts = await Store.find({ _id: storeid });
-  // allProducts = allProducts["products"];
+
   if (allProducts.length > 0) {
     return res.status(200).send(allProducts);
   } else {
@@ -80,43 +80,43 @@ export const getStoreProduct = async (req, res) => {
   }
 };
 
-// export const searchProductByName = async (req, res) => {
-//   const product_name = req.params.product_name;
-//   const result = await find({ product_name: { $regex: product_name } });
-//   if (result.length > 0) {
-//     return res.status(200).send(result);
-//   } else {
-//     return res.status(400).send({ msg: "No Product Found" });
-//   }
-// };
+export const searchProductByName = async (req, res) => {
+  const product_name = req.params.product_name;
+  const result = await Product.find({ product_name: { $regex: product_name } });
+  if (result.length > 0) {
+    return res.status(200).send(result);
+  } else {
+    return res.status(400).send({ msg: "No Product Found" });
+  }
+};
 
-// export const updateProduct = async (req, res) => {
-//   const productId = req.params.product_id;
-//   const product_name = req.body.product_name;
-//   const description = req.body.description;
-//   const price = req.body.price;
-//   const rating = 0;
-//   const product_type = req.body.type;
-//   const quantity = req.body.quantity;
-//   await updateOne(
-//     { __id: ObjectId(productId) },
-//     {
-//       $set: {
-//         product_name,
-//         description,
-//         price,
-//         rating,
-//         product_type,
-//         quantity,
-//       },
-//     }
-//   )
-//     .then((item) => {
-//       return res.status(200).json(item);
-//     })
-//     .catch((err) => {
-//       return res.status(400).send(err);
-//     });
-//   {
-//   }
-// };
+export const updateProduct = async (req, res) => {
+  const productId = req.params.product_id;
+  const product_name = req.body.product_name;
+  const description = req.body.description;
+  const price = req.body.price;
+  const rating = 0;
+  const product_type = req.body.type;
+  const quantity = req.body.quantity;
+  await Product.updateOne(
+    { __id: ObjectId(productId) },
+    {
+      $set: {
+        product_name,
+        description,
+        price,
+        rating,
+        product_type,
+        quantity,
+      },
+    }
+  )
+    .then((item) => {
+      return res.status(200).json(item);
+    })
+    .catch((err) => {
+      return res.status(400).send(err);
+    });
+  {
+  }
+};
