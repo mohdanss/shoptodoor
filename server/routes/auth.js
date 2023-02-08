@@ -1,8 +1,56 @@
-const User = require("../models/user");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+// importing user context
+import User, { findOne } from "../models/user.js";
 
-module.exports.signup = async function (req, res) {
+import twilio from "twilio";
+
+import twilioConfig from "../twilioAuth/twilio.env.js";
+const accountSid = twilioConfig.accountSid;
+const authToken = twilioConfig.authToken;
+
+const twilioClient = twilio(accountSid, authToken);
+
+export const loginTwilio = (req, res) => {
+  // request phone number and channel will be sms for default
+  let { number, channel } = req.query;
+  number = "+92" + number.slice(1);
+  console.log(req.query);
+  twilioClient.verify.v2
+    .services(twilioConfig.serviceId)
+    .verifications.create({
+      to: number,
+      channel: channel || "sms",
+    })
+    .then((data) => {
+      console.log("Login");
+      console.log(data);
+      res.status(200).send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({ err: err.message });
+    });
+};
+
+export const verifyTwilio = (req, res) => {
+  // request phone number and code
+  let { number, code } = req.query;
+  number = "+92" + number.slice(1);
+  twilioClient.verify.v2
+    .services(twilioConfig.serviceId)
+    .verificationChecks.create({
+      to: number,
+      code: code,
+    })
+    .then((data) => {
+      console.log("verify");
+      console.log(data);
+      res.status(200).send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({ err: err.message });
+    });
+};
+
+export const register = async (req, res) => {
   // Our register logic starts here
   try {
     // Get user input
@@ -35,14 +83,14 @@ module.exports.signup = async function (req, res) {
     } else {
       // check if user already exist
       // Validate if user exist in our database
-      const oldUser = await User.findOne({ email });
+      const oldUser = await findOne({ email });
 
       if (oldUser) {
         return res.status(409).send("User Already Exist. Please Login");
       }
 
       //Encrypt user password
-      encryptedPassword = await bcrypt.hash(password, 10);
+      encryptedPassword = await hash(password, 10);
       // Create user in our database
 
       const user = new User({
@@ -52,15 +100,10 @@ module.exports.signup = async function (req, res) {
         password: encryptedPassword,
         role: role,
         token: "token",
-        phone: phone,
       });
-      const token = jwt.sign(
-        { user_id: user._id, email },
-        process.env.TOKEN_KEY,
-        {
-          expiresIn: "2h",
-        }
-      );
+      const token = sign({ user_id: user._id, email }, process.env.TOKEN_KEY, {
+        expiresIn: "2h",
+      });
       user.token = token;
 
       console.log(user);
@@ -80,7 +123,7 @@ module.exports.signup = async function (req, res) {
   }
 };
 
-module.exports.login = async function (req, res) {
+export const login = async (req, res) => {
   // Our login logic starts here
   try {
     // Get user input
@@ -92,18 +135,14 @@ module.exports.login = async function (req, res) {
       return res.status(400).send("All input is required");
     }
     //Validate if user exist in our database
-    const user = await User.findOne({ email: email.toLowerCase() });
+    const user = await findOne({ email: email.toLowerCase() });
 
-    if (user && (await bcrypt.compare(password, user.password))) {
+    if (user && compare(password, user.password)) {
       // Create token
 
-      const token = jwt.sign(
-        { user_id: user._id, email },
-        process.env.TOKEN_KEY,
-        {
-          expiresIn: "2h",
-        }
-      );
+      const token = sign({ user_id: user._id, email }, process.env.TOKEN_KEY, {
+        expiresIn: "2h",
+      });
 
       user.token = token;
 
