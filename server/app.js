@@ -1,7 +1,5 @@
-// require("dotenv").config();
 import dotenv from "dotenv";
 dotenv.config();
-// require("./config/database").connect();
 import database from "./config/database.js";
 database();
 
