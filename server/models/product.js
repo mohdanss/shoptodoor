@@ -1,7 +1,7 @@
-const { ObjectID } = require("bson");
-const mongoose = require("mongoose");
+import { ObjectID } from "bson";
+import { Schema, model } from "mongoose";
 
-const ProductSchema = new mongoose.Schema({
+const ProductSchema = new Schema({
   product_name: { type: String, default: null },
   description: { type: String, default: null },
   // add price attribuet with type double and default value 0.0
@@ -12,4 +12,4 @@ const ProductSchema = new mongoose.Schema({
   quantity: { type: Number, default: 0 },
 });
 
-module.exports = mongoose.model("product", ProductSchema);
+export default model("Product", ProductSchema);
