@@ -2,9 +2,15 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 // importing the svg logo (which is create as react component)
 import Logo from '../../Static/Logo/LogoWhite';
+import navigation
 
 // welcome - default RC.
 const Welcome = () => {
+  // on press handler
+  const onPressHandler = () => {
+    // navigate to the login screen
+    navigation.navigate('Login');
+  };
   return (
     // welcome screen container
     <View style={[styles.container]}>
