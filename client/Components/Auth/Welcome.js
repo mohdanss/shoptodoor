@@ -2,15 +2,9 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 // importing the svg logo (which is create as react component)
 import Logo from '../../Static/Logo/LogoWhite';
-import navigation
 
 // welcome - default RC.
-const Welcome = () => {
-  // on press handler
-  const onPressHandler = () => {
-    // navigate to the login screen
-    navigation.navigate('Login');
-  };
+const Welcome = ({navigation}) => {
   return (
     // welcome screen container
     <View style={[styles.container]}>
@@ -36,16 +30,13 @@ const Welcome = () => {
             {'\n'}
           </Text>
           <Text style={[styles.text, styles.textBold]}>
-            Login or register to get started.
+            Let's to get started.
           </Text>
           {/* a small circle empty to show a single page */}
         </View>
         {/* buttons container */}
         <View style={styles.buttonContainer}>
-          {/* login button */}
-          <LoginButton />
-          {/* register button */}
-          <RegisterButton />
+          <Auth navigation={navigation} />
         </View>
       </View>
     </View>
@@ -53,19 +44,13 @@ const Welcome = () => {
 };
 
 // login button component
-const LoginButton = () => {
+const Auth = ({navigation}) => {
+  // on press navigate to login page
   return (
-    <TouchableOpacity style={[styles.btn, styles.btnLogin]}>
-      <Text style={[styles.btnText, styles.btnLoginText]}>Login</Text>
-    </TouchableOpacity>
-  );
-};
-
-// register button component
-const RegisterButton = () => {
-  return (
-    <TouchableOpacity style={[styles.btn, styles.btnRegister]}>
-      <Text style={[styles.btnText, styles.btnLoginText]}>Register</Text>
+    <TouchableOpacity
+      style={[styles.btn, styles.btnAuth]}
+      onPress={() => navigation.navigate('GetCredentials')}>
+      <Text style={[styles.btnText, styles.btnAuthText]}>Continue</Text>
     </TouchableOpacity>
   );
 };
@@ -87,7 +72,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '90%',
   },
-  btnLogin: {
+  btnAuth: {
     backgroundColor: '#A21D21',
     borderColor: '#181722',
   },
@@ -101,7 +86,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
   },
-  btnLoginText: {
+  btnAuthText: {
     color: '#f6f6f6',
   },
   btnRegisterText: {

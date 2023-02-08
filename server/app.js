@@ -164,14 +164,17 @@ app.post("/login", async (req, res) => {
 
 			user.token = token;
 
-			// user
-			return res.status(200).json({ user: user, msg: "Login Successful" });
-		}
-		return res.status(400).send("Invalid Credentials");
-	} catch (err) {
-		console.log(err);
-		res.status(500).send("Something went wrong");
-	}
-});
+      // save user token
+      user.save();
+
+
+      
+
+
+const vendor = require("./routes/vendor");
+app.post("/becomeVendor/:id", vendor.becomeVendor);
+app.post("/addProduct/:id", vendor.addProduct); //ok
+app.get("/getStoreProducts/:storeId", vendor.getStoreProduct); //ok
+app.get("/searchProduct/:name", vendor.searchProductByName); //ok
 
 export default app;
