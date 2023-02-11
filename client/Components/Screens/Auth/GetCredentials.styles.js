@@ -1,80 +1,5 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
-} from 'react-native';
-// importing the svg logo (which is create as react component)
-import Logo from '../../Static/Logo/LogoWhite';
+import {StyleSheet} from 'react-native';
 
-// welcome - default RC.
-const GetCredentials = ({navigation}) => {
-  return (
-    <View style={[styles.container]}>
-      <View style={styles.eclipseContainer}>
-        <View style={styles.eclipse} />
-        <View style={styles.stdTextContainer}>
-          <Text style={styles.stdWhiteB}>
-            <Logo />
-          </Text>
-        </View>
-      </View>
-      <View style={styles.bottomContent}>
-        {/* a view to hold step-1 as header and 3 horizontal lines */}
-        <View style={styles.stepContainer}>
-          <View style={styles.stepHeader}>
-            <Text style={styles.stepHeaderText}>OTP Authentication</Text>
-          </View>
-          <View style={styles.stepLineContainer}>
-            <View style={[styles.stepLine]} />
-            <View style={[styles.stepLine, styles.dim]} />
-            <View style={[styles.stepLine, styles.dim]} />
-          </View>
-        </View>
-        <View style={styles.credContainer}>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="First Name"
-              placeholderTextColor="#fff"
-            />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Last Name"
-              placeholderTextColor="#fff"
-            />
-          </View>
-
-          <View style={styles.textContainer}>
-            <Text style={[styles.text]}>
-              Click the button below to get proceed.
-            </Text>
-          </View>
-          <View style={styles.buttonContainer}>
-            <Auth navigation={navigation} />
-          </View>
-        </View>
-      </View>
-    </View>
-  );
-};
-
-const Auth = ({navigation}) => {
-  return (
-    <TouchableOpacity
-      style={[styles.btn, styles.btnAuth]}
-      onPress={() => navigation.navigate('GetCredentials')}>
-      <Text style={[styles.btnText, styles.btnAuthText]}>Continue</Text>
-    </TouchableOpacity>
-  );
-};
-
-// styling...
 const styles = StyleSheet.create({
   bottomContent: {
     alignItems: 'center',
@@ -128,6 +53,9 @@ const styles = StyleSheet.create({
     height: '65%',
     paddingBottom: 24,
   },
+  light: {
+    color: '#f6f6f6',
+  },
   dim: {
     opacity: 0.3,
   },
@@ -162,6 +90,30 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 12,
     width: '100%',
+  },
+  otpContainer: {
+    alignItems: 'center',
+    borderColor: 'red',
+    height: '100%',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  otpField: {
+    borderColor: 'red',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '70%',
+  },
+  otpText: {
+    color: '#f6f6f6',
+    fontSize: 24,
+    fontWeight: 'bold',
+    borderColor: '#a21d21',
+    borderWidth: 2,
+    textAlign: 'center',
+    borderRadius: 6,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
   },
   stdTextContainer: {
     alignItems: 'center',
@@ -203,6 +155,7 @@ const styles = StyleSheet.create({
     height: 3,
     width: '32%',
   },
+
   stepLineContainer: {
     borderColor: 'red',
     flexDirection: 'row',
@@ -233,4 +186,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GetCredentials;
+export default styles;

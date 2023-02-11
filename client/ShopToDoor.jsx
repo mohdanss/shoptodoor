@@ -1,11 +1,10 @@
 import React from 'react';
-import Welcome from './Components/Auth/Welcome';
+import Welcome from './Components/Screens/Welcome/Welcome';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import GetCredentials from './Components/Auth/GetCredentials';
+import GetCredentials from './Components/Screens/Auth/GetCredentials';
 
 const Stack = createNativeStackNavigator();
-
 const App = () => {
   return (
     <NavigationContainer>
@@ -14,11 +13,13 @@ const App = () => {
           name="Welcome"
           component={Welcome}
           options={{headerShown: false}}
+          animation="fade"
         />
         <Stack.Screen
           name="GetCredentials"
           component={GetCredentials}
           options={{headerShown: false}}
+          animation="fade"
         />
       </Stack.Navigator>
     </NavigationContainer>
