@@ -14,20 +14,21 @@ export const loginTwilio = (req, res) => {
   let { number, channel } = req.query;
   number = "+92" + number.slice(1);
   console.log(req.query);
-  twilioClient.verify.v2
-    .services(twilioConfig.serviceId)
-    .verifications.create({
-      to: number,
-      channel: channel || "sms",
-    })
-    .then((data) => {
-      console.log("Login");
-      console.log(data);
-      res.status(200).send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({ err: err.message });
-    });
+  // twilioClient.verify.v2
+  //   .services(twilioConfig.serviceId)
+  //   .verifications.create({
+  //     to: number,
+  //     channel: channel || "sms",
+  //   })
+  //   .then((data) => {
+  //     console.log("Login");
+  //     console.log(data);
+  //     res.status(200).send(data);
+  //   })
+  //   .catch((err) => {
+  //     res.status(500).send({ err: err.message });
+  //   });
+  res.send("ok");
 };
 
 export const verifyTwilio = (req, res) => {

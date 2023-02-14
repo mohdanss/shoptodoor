@@ -1,38 +1,59 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import styles from './GetCredentials.styles';
+import SvgImage from './logoWhite.svg';
 
 import {View, Text, TouchableOpacity, TextInput} from 'react-native';
 
+import EclipseDropper from '../../Molecules/EclipseDropper';
+import HeaderTextAuthScreens from '../../Molecules/HeaderTextAuthScreens';
+import STDInput from '../../Atoms/STDInput';
+import OTPScreen from './OTPScreen';
+import Logo from '../../Atoms/Logo/Logo';
+
 import {useState} from 'react';
 
-import Logo from '../../../assets/Logo/LogoWhite';
-
 const GetCredentials = ({route, navigation}) => {
-  console.log(route);
-  let step = 3 || route.params.step;
+  const [stepNo, setStepNo] = useState(route.params.step);
 
-  const [stepNo, setStepNo] = useState(step);
+  // for step 1
+  const [fName, setFName] = useState('');
+  const [lName, setLName] = useState('');
+
+  // for step 2
   const [number, setNumber] = useState('');
+
+  // for step 3
   const [otp, setOtp] = useState('');
-  const inputs = useRef([]);
 
-  const handleOTPInput = (index, value) => {
-    setOtp(value);
-    console.log(value, index);
-    if (value !== '' && index !== 3) {
-      inputs.current[index + 1].focus();
+  // if both first and last name are valid, enable the next button, using useEffect
+  useEffect(() => {
+    if (stepNo === 1) {
+      console.log(fName, lName);
+      if (fName.length >= 3 && lName.length >= 3) {
+        setProceedBtnEnabled(true);
+      } else {
+        setProceedBtnEnabled(false);
+      }
+    } else if (stepNo === 2) {
+      console.log(fName, lName, number);
+      if (number.length === 11 && /^03[0-4][0-9]{8}$/.test(number)) {
+        setProceedBtnEnabled(true);
+      } else {
+        setProceedBtnEnabled(false);
+      }
+    } else if (stepNo === 3) {
+      console.log(fName, lName, number, otp);
+      console.log(otp.length + ' <-> ' + otp);
+      if (otp.length === 4) {
+        setProceedBtnEnabled(true);
+      } else {
+        setProceedBtnEnabled(false);
+      }
     }
-    if (value === '' && index !== 0) {
-      inputs.current[index - 1].focus();
-    }
-  };
+  }, [stepNo, fName, lName, number, otp]);
 
-  const handleOTPBackspace = (index, value) => {
-    setOtp(value);
-    if (value === '') {
-      inputs.current[index - 1].focus();
-    }
-  };
+  // when to enable the next button
+  const [proceedBtnEnabled, setProceedBtnEnabled] = useState(false);
 
   const handleOTPSubmit = () => {
     console.log('OTP submitted');
@@ -40,85 +61,49 @@ const GetCredentials = ({route, navigation}) => {
 
   return (
     <View style={[styles.container]}>
-      <View style={styles.eclipseContainer}>
-        <View style={styles.eclipse} />
-        <View style={styles.stdTextContainer}>
-          <Text style={styles.stdWhiteB}>
-            <Logo />
-          </Text>
+      {/* <EclipseDropper /> */}
+      <View style={styles.headerContainer}>
+        <View style={styles.backNavContainer}>
+          <TouchableOpacity style={styles.backNav}>
+            <Text style={styles.backNavText}>Back</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.logoContainer}>
+          <SvgImage />
         </View>
       </View>
       <View style={styles.bottomContent}>
-        <View style={styles.stepContainer}>
-          <View style={styles.stepHeader}>
-            <Text style={styles.stepHeaderText}>
-              {stepNo === 1
-                ? 'Enter your name'
-                : stepNo === 2
-                ? 'Enter your number'
-                : 'Enter your OTP'}
-            </Text>
-          </View>
-          <View style={styles.stepLineContainer}>
-            <Lines stepNo={stepNo} />
-          </View>
-        </View>
+        <HeaderTextAuthScreens stepNo={stepNo} />
         <View style={styles.credContainer}>
-          {stepNo === 1 ? (
-            <>
+          {
+            // for register NAME -> PHONE -> OTP
+            stepNo === 1 ? (
+              <>
+                <STDInput placeholder="John" type="text" cb={setFName} />
+                <STDInput placeholder="Doe" type="text" cb={setLName} />
+              </>
+            ) : // for login PHONE -> OTP
+            stepNo === 2 ? (
               <View style={styles.inputContainer}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="John"
-                  placeholderTextColor="#454545"
+                <STDInput
+                  placeholder="Phone Number"
+                  type="number"
+                  cb={setNumber}
                 />
               </View>
-              <View style={styles.inputContainer}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Doe"
-                  placeholderTextColor="#454545"
-                />
-              </View>
-            </>
-          ) : stepNo === 2 ? (
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                placeholder="Phone Number"
-                placeholderTextColor="#fff"
-                keyboardType="numeric"
-                onChangeText={text => setNumber(text)}
-                value={number}
-              />
-            </View>
-          ) : (
-            <View style={styles.otpContainer}>
-              <View style={styles.otpField}>
-                {Array(4)
-                  .fill()
-                  .map((data, index) => (
-                    <TextInput
-                      key={index}
-                      style={styles.otpText}
-                      onChangeText={value => handleOTPInput(index, value)}
-                      onKeyPress={e =>
-                        e.nativeEvent.key === 'Backspace'
-                          ? handleOTPBackspace(index, e.nativeEvent.key)
-                          : null
-                      }
-                      onSubmitEditing={handleOTPSubmit}
-                      maxLength={1}
-                      placeholderTextColor="#fff"
-                      placeholder={inputs[index]}
-                      keyboardType="numeric"
-                      returnKeyType="done"
-                      ref={ref => (inputs.current[index] = ref)}
-                    />
-                  ))}
-              </View>
-            </View>
-          )}
+            ) : (
+              <>
+                <View style={styles.OTPScreenTextContainer}>
+                  <Text style={styles.OTPScreenText1}>Get Verified</Text>
+                  <Text style={styles.OTPScreenText2}>
+                    a verification code has been sent via SMS to {'\n'} +92{' '}
+                    {number.slice(1)}
+                  </Text>
+                </View>
+                <OTPScreen cb={setOtp} navigation={navigation} />
+              </>
+            )
+          }
 
           <View style={styles.textContainer}>
             <Text style={[styles.text]}>
@@ -130,7 +115,12 @@ const GetCredentials = ({route, navigation}) => {
             </Text>
           </View>
           <View style={styles.buttonContainer}>
-            <Auth navigation={navigation} />
+            <Auth
+              navigation={navigation}
+              step={stepNo}
+              isEnabled={proceedBtnEnabled}
+              callback={setStepNo}
+            />
           </View>
         </View>
       </View>
@@ -138,32 +128,26 @@ const GetCredentials = ({route, navigation}) => {
   );
 };
 
-const Auth = ({navigation, step}) => {
+const Auth = ({navigation, step, isEnabled, callback}) => {
   return (
     <TouchableOpacity
-      style={[styles.btn, styles.btnAuth]}
-      onPress={() => navigation.navigate('GetCredentials')}>
-      <Text style={[styles.btnText, styles.btnAuthText]}>Continue</Text>
-    </TouchableOpacity>
-  );
-};
-
-const Lines = ({stepNo}) => {
-  console.log(stepNo);
-  return (
-    <>
-      <View style={styles.stepLine} />
-      <View
-        style={
-          stepNo === 2 || stepNo === 3
-            ? styles.stepLine
-            : [styles.stepLine, styles.dim]
+      style={[
+        styles.btn,
+        styles.btnAuth,
+        !isEnabled ? styles.btnAuthDisabled : null,
+      ]}
+      onPress={() => {
+        if (step === 1) {
+          callback(2);
+        } else if (step === 2) {
+          callback(3);
+        } else {
+          callback(4);
         }
-      />
-      <View
-        style={stepNo === 4 ? styles.stepLine : [styles.stepLine, styles.dim]}
-      />
-    </>
+      }}
+      disabled={!isEnabled}>
+      <Text style={(styles.btnAuthText, styles.textBold)}>Proceed</Text>
+    </TouchableOpacity>
   );
 };
 

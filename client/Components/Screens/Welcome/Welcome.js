@@ -1,56 +1,39 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import Logo from '../../../assets/Logo/LogoWhite';
-import styles from 'Welcome.styles';
 
-// welcome - default RC.
+import {View, Text} from 'react-native';
+
+import STDButton from '../../Atoms/STDButton';
+import EclipseDropper from '../../Molecules/EclipseDropper';
+
+import styles from './Welcome.styles';
+
+const welcomeText =
+  'Welcome to our official app, why wait? Start shopping now and experience the convenience of Shop to Door';
+const welcomeTextBold = "Let's get started";
+
 const Welcome = ({navigation}) => {
   return (
-    // welcome screen container
     <View style={[styles.container]}>
-      <View style={styles.eclipseContainer}>
-        <View style={styles.eclipse} />
-        {/* the title logo container */}
-        <View style={styles.stdTextContainer}>
-          {/* the title logo/text */}
-          <Text style={styles.stdWhiteB}>
-            {/* using svg logo  */}
-            <Logo />
-          </Text>
-        </View>
-      </View>
-      {/* bottom content container */}
+      <EclipseDropper />
       <View style={styles.bottomContent}>
-        {/* text container */}
         <View style={styles.textContainer}>
-          {/* text */}
-          <Text style={styles.text}>
-            Welcome to our official app, why wait? Start shopping now and
-            experience the convenience of{' '}
-            <Text style={styles.textBoldItalic}>Shop to Door</Text>
-            {'\n'}
-          </Text>
-          <Text style={[styles.text, styles.textBold]}>Let's get started</Text>
-          {/* a small circle empty to show a single page */}
+          <Text style={styles.text}>{welcomeText + '\n'}</Text>
+          <Text style={[styles.text, styles.textBold]}>{welcomeTextBold}</Text>
         </View>
-        {/* buttons container */}
         <View style={styles.buttonContainer}>
-          <Auth navigation={navigation} step={2} />
-          <Auth navigation={navigation} step={1} />
+          <STDButton
+            navigation={navigation}
+            step={2}
+            callback={() => navigation.navigate('GetCredentials', {step: 2})}
+          />
+          <STDButton
+            navigation={navigation}
+            step={1}
+            callback={() => navigation.navigate('GetCredentials', {step: 1})}
+          />
         </View>
       </View>
     </View>
-  );
-};
-
-// login button component
-const Auth = ({navigation, step}) => {
-  return (
-    <TouchableOpacity
-      style={[styles.btn, step === 2 ? styles.btnLogin : styles.btnRegister]}
-      onPress={() => navigation.navigate('GetCredentials', {step: step})}>
-      <Text style={styles.btnText}>{step === 2 ? 'Login' : 'Register'}</Text>
-    </TouchableOpacity>
   );
 };
 

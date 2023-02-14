@@ -3,8 +3,8 @@ import Svg, {Path, Defs, Pattern, Use, Image} from 'react-native-svg';
 
 const SvgComponent = props => (
   <Svg
-    width={116}
-    height={75}
+    width={props.width}
+    height={props.height}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     xmlnsXlink="http://www.w3.org/1999/xlink"

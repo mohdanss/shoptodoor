@@ -3,12 +3,12 @@ import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
   bottomContent: {
     alignItems: 'center',
-    height: '65%',
+    justifyContent: 'space-between',
+    height: '70%',
     width: '90%',
   },
   btn: {
     alignItems: 'center',
-    borderWidth: 2,
     borderRadius: 50,
     height: 48,
     justifyContent: 'center',
@@ -17,6 +17,9 @@ const styles = StyleSheet.create({
   btnAuth: {
     backgroundColor: '#A21D21',
     borderColor: '#181722',
+  },
+  btnAuthDisabled: {
+    backgroundColor: '#252525',
   },
   btnRegister: {
     backgroundColor: '#181722',
@@ -50,7 +53,6 @@ const styles = StyleSheet.create({
   credContainer: {
     justifyContent: 'flex-end',
     width: '100%',
-    height: '65%',
     paddingBottom: 24,
   },
   light: {
@@ -59,32 +61,9 @@ const styles = StyleSheet.create({
   dim: {
     opacity: 0.3,
   },
-  eclipseContainer: {
-    alignItems: 'center',
-    width: '100%',
-    height: '35%',
-  },
-  eclipse: {
-    backgroundColor: '#A21D21',
-    borderBottomLeftRadius: 200,
-    height: '100%',
-    left: '60%',
-    position: 'absolute',
-    transform: [{scaleX: 2}],
-    width: '150%',
-  },
-  input: {
-    color: '#f6f6f6',
-    fontSize: 18,
-    fontWeight: '400',
-    width: '100%',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-  },
+
   inputContainer: {
     alignItems: 'center',
-    borderColor: '#f6f6f6',
-    borderWidth: 2,
     borderRadius: 4,
     height: 56,
     justifyContent: 'center',
@@ -94,7 +73,7 @@ const styles = StyleSheet.create({
   otpContainer: {
     alignItems: 'center',
     borderColor: 'red',
-    height: '100%',
+    height: '60%',
     justifyContent: 'center',
     width: '100%',
   },
@@ -184,6 +163,46 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     width: '100%',
   },
+
+  // OTP Screen Text
+  OTPScreenTextContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  OTPScreenText1: {
+    color: '#f6f6f6',
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  OTPScreenText2: {
+    color: '#f6f6f6',
+    fontSize: 16,
+    textAlign: 'center',
+    fontWeight: 'normal',
+  },
+
+  // Header
+  headerContainer: {
+    alignItems: 'center',
+    borderColor: 'red',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '90%',
+  },
+
+  backNavContainer: {
+    width: '50%',
+  },
+  logoContainer: {
+    width: '50%',
+    alignItems: 'flex-end',
+  },
+
+
+
+  // Header
 });
 
 export default styles;
